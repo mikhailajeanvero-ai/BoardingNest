@@ -1,0 +1,96 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Room Requests - BoardingNest{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 40px 20px;">
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h1 style="color: #FF1493; font-size: 2.5rem; margin-bottom: 10px;">Room Availability Requests</h1>
+        <p style="color: #666;">Manage requests from customers for your rooms</p>
+        {% if pending_count > 0 %}
+            <div style="background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 10px; border-radius: 8px; margin-top: 20px;">
+                You have {{ pending_count }} pending request{{ pending_count|pluralize }}
+            </div>
+        {% endif %}
+    </div>
+
+    {% if requests %}
+        <div class="row">
+            {% for req in requests %}
+                <div class="col-md-6 mb-4">
+                    <div class="card" style="border-radius: 15px; box-shadow: 0 4px 15px rgba(255, 20, 147, 0.1);">
+                        <div class="card-body">
+                            <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 15px;">
+                                <h5 style="color: #FF1493; margin: 0;">{{ req.room.title }}</h5>
+                                <span class="badge {% if req.status == 'pending' %}badge-warning{% elif req.status == 'approved' %}badge-success{% else %}badge-danger{% endif %}" 
+                                      style="padding: 5px 10px; border-radius: 20px;">
+                                    {{ req.get_status_display }}
+                                </span>
+                            </div>
+                            
+                            <p><strong>Customer:</strong> {{ req.customer.get_full_name|default:req.customer.username }}</p>
+                            <p><strong>Email:</strong> {{ req.customer.email }}</p>
+                            {% if req.customer.phone_number %}
+                                <p><strong>Phone:</strong> {{ req.customer.phone_number }}</p>
+                            {% endif %}
+                            <p><strong>Request Date:</strong> {{ req.created_at|date:"M d, Y H:i" }}</p>
+                            
+                            {% if req.message %}
+                                <p><strong>Message:</strong> {{ req.message }}</p>
+                            {% endif %}
+
+                            {% if req.status == 'pending' %}
+                                <div style="margin-top: 20px; display: flex; gap: 10px;">
+                                    <form method="post" action="{% url 'update_request_status' req.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="status" value="approved">
+                                        <button type="submit" class="btn btn-success" style="border-radius: 20px; padding: 8px 20px;">
+                                            Accept
+                                        </button>
+                                    </form>
+                                    <form method="post" action="{% url 'update_request_status' req.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="status" value="rejected">
+                                        <button type="submit" class="btn btn-danger" style="border-radius: 20px; padding: 8px 20px;">
+                                            Decline
+                                        </button>
+                                    </form>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div style="text-align: center; padding: 60px 20px;">
+            <div style="color: #999; font-size: 1.2rem;">
+                <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 20px; display: block;"></i>
+                No availability requests yet
+            </div>
+            <p style="color: #666;">When customers request availability for your rooms, they will appear here.</p>
+        </div>
+    {% endif %}
+
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="{% url 'landlord_dashboard' %}" class="btn btn-secondary" style="border-radius: 25px; padding: 12px 40px; font-size: 1rem;">
+            ← Back to Dashboard
+        </a>
+    </div>
+</div>
+
+<style>
+.badge-warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+.badge-success {
+    background-color: #28a745;
+    color: white;
+}
+.badge-danger {
+    background-color: #dc3545;
+    color: white;
+}
+</style>
+{% endblock %}

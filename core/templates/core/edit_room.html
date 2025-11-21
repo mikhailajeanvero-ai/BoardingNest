@@ -1,0 +1,65 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Edit Room - BoardingNest{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; padding: 40px 20px;">
+    <div class="card">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #FF1493; font-size: 2.5rem;">✏️ Edit Room</h1>
+        </div>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <label for="title">Room Title</label>
+            <input type="text" id="title" name="title" value="{{ room.title }}" required>
+            
+            <label for="room_type">Room Type</label>
+            <select id="room_type" name="room_type" required>
+                <option value="single" {% if room.room_type == 'single' %}selected{% endif %}>Single</option>
+                <option value="double" {% if room.room_type == 'double' %}selected{% endif %}>Double</option>
+            </select>
+            
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="5" required>{{ room.description }}</textarea>
+            
+            <label for="price">Price (Optional)</label>
+            <input type="number" id="price" name="price" step="0.01" value="{% if room.price %}{{ room.price }}{% endif %}">
+            
+            <label for="location">Location (Optional)</label>
+            <input type="text" id="location" name="location" value="{{ room.location|default:'' }}">
+            
+            <label for="contact_number">Contact Number</label>
+            <input type="tel" id="contact_number" name="contact_number" value="{{ room.contact_number|default:'' }}">
+            
+            <label for="facebook_link">Facebook Link (Optional)</label>
+            <input type="url" id="facebook_link" name="facebook_link" value="{{ room.facebook_link|default:'' }}">
+            
+            <label for="instagram_link">Instagram Link (Optional)</label>
+            <input type="url" id="instagram_link" name="instagram_link" value="{{ room.instagram_link|default:'' }}">
+            
+            <label for="other_contact">Other Contact Info (Optional)</label>
+            <input type="text" id="other_contact" name="other_contact" value="{{ room.other_contact|default:'' }}">
+            
+            <label for="image">Change Room Image (Optional)</label>
+            <input type="file" id="image" name="image" accept="image/*">
+            
+            <label style="display: flex; align-items: center; margin-top: 20px;">
+                <input type="checkbox" name="is_available" {% if room.is_available %}checked{% endif %} style="width: auto; margin-right: 10px;">
+                <span>Mark as available</span>
+            </label>
+            
+            <div style="display: flex; gap: 15px; margin-top: 30px;">
+                <button type="submit" class="btn btn-primary" style="flex: 1;">
+                    💾 Update Room
+                </button>
+                <a href="{% url 'landlord_dashboard' %}" class="btn btn-secondary" style="flex: 1; text-align: center; line-height: 50px;">
+                    ❌ Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

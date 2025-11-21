@@ -1,0 +1,96 @@
+{% extends 'core/base.html' %}
+
+{% block title %}My Profile - BoardingNest{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; padding: 40px 20px;">
+    <div class="card">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #FF1493; font-size: 2.5rem;">👤 My Profile</h1>
+            <p style="color: #666;">Update your personal information</p>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+            <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                <strong>Please correct the errors below:</strong>
+                <ul style="margin: 10px 0 0 20px; padding: 0;">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <label for="first_name">First Name</label>
+                    <input type="text" id="first_name" name="first_name" required value="{{ form.first_name.value }}">
+                </div>
+                
+                <div>
+                    <label for="last_name">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" required value="{{ form.last_name.value }}">
+                </div>
+            </div>
+            
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required value="{{ form.email.value }}">
+            
+            <label for="phone_number">Phone Number</label>
+            <input type="tel" id="phone_number" name="phone_number" value="{{ form.phone_number.value|default_if_none:'' }}" placeholder="e.g., +63 912 345 6789">
+            
+            <label for="facebook">Facebook URL</label>
+            <input type="url" id="facebook" name="facebook" value="{{ form.facebook.value|default_if_none:'' }}" placeholder="https://facebook.com/yourprofile">
+            
+            <label for="instagram">Instagram URL</label>
+            <input type="url" id="instagram" name="instagram" value="{{ form.instagram.value|default_if_none:'' }}" placeholder="https://instagram.com/yourprofile">
+            
+            <label for="other_contact">Other Contact Information</label>
+            <input type="text" id="other_contact" name="other_contact" value="{{ form.other_contact.value|default_if_none:'' }}" placeholder="e.g., Telegram, Viber, etc.">
+            
+            <div style="display: flex; gap: 15px; margin-top: 30px;">
+                <button type="submit" class="btn btn-primary" style="flex: 1; padding: 15px; height: 50px;">
+                     Save Profile
+                </button>
+                <a href="{% url 'landlord_dashboard' %}" class="btn btn-secondary" style="flex: 1; text-align: center; padding: 15px; height: 50px; display: flex; align-items: center; justify-content: center; {% if user.role == 'customer' %}display:none;{% endif %}">
+                    ← Back to Dashboard
+                </a>
+                <a href="{% url 'customer_dashboard' %}" class="btn btn-secondary" style="flex: 1; text-align: center; padding: 15px; height: 50px; display: flex; align-items: center; justify-content: center; {% if user.role == 'landlord' %}display:none;{% endif %}">
+                    ← Back to Dashboard
+                </a>
+            </div>
+        </form>
+        
+        <div style="margin-top: 40px; padding-top: 30px; border-top: 2px solid #eee;">
+            <h3 style="color: #FF1493; margin-bottom: 15px;">Account Information</h3>
+            <p style="color: #666; margin: 10px 0;"><strong>Username:</strong> {{ user.username }}</p>
+            <p style="color: #666; margin: 10px 0;"><strong>Role:</strong> {{ user.get_role_display }}</p>
+            <p style="color: #666; margin: 10px 0;"><strong>Member Since:</strong> {{ user.date_joined|date:"F d, Y" }}</p>
+        </div>
+        
+        <div style="margin-top: 40px; padding-top: 30px; border-top: 2px solid #eee;">
+            <h3 style="color: #FF1493; margin-bottom: 15px;">📢 Ads & Corner</h3>
+            <div style="background: linear-gradient(135deg, #FFE4E1 0%, #FFB6C1 100%); padding: 20px; border-radius: 15px;">
+                <p style="color: #666; font-size: 1.1rem; margin-bottom: 15px; text-align: center;">🎉 Explore our promotional content!</p>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
+                    <a href="{% url 'logo' %}" class="btn btn-primary" style="padding: 12px 25px; border-radius: 25px;">
+                        🎨 View Logo
+                    </a>
+                    <a href="{% url 'poster' %}" class="btn btn-primary" style="padding: 12px 25px; border-radius: 25px;">
+                        📋 View Poster
+                    </a>
+                    <a href="{% url 'video' %}" class="btn btn-primary" style="padding: 12px 25px; border-radius: 25px;">
+                        🎥 Watch Video
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

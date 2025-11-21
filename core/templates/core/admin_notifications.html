@@ -1,0 +1,67 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Availability Requests - BoardingNest Admin{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">📬 Availability Requests</h1>
+        <p class="subtitle">Manage room availability requests from customers</p>
+    </div>
+    
+    {% if requests %}
+    <div class="grid">
+        {% for req in requests %}
+        <div class="card">
+            <div style="margin-bottom: 15px;">
+                <h2 style="color: #FF1493; margin-bottom: 10px;">Room: {{ req.room.title }}</h2>
+                <p style="color: #666; margin-bottom: 10px;"><strong>Customer:</strong> {{ req.customer.get_full_name|default:req.customer.username }}</p>
+                <p style="color: #666; margin-bottom: 10px;"><strong>Email:</strong> {{ req.customer.email }}</p>
+                <p style="color: #666; margin-bottom: 10px;"><strong>Phone:</strong> {{ req.customer.phone_number|default:"Not provided" }}</p>
+                <p style="color: #666; margin-bottom: 10px;"><strong>Request Date:</strong> {{ req.created_at|date:"F d, Y g:i A" }}</p>
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <p><strong>Status:</strong> 
+                    <span class="badge {% if req.status == 'pending' %}badge-info{% elif req.status == 'approved' %}badge-success{% else %}badge-danger{% endif %}">
+                        {{ req.get_status_display }}
+                    </span>
+                </p>
+            </div>
+            
+            {% if req.message %}
+            <div style="background: #fff9f0; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                <p><strong>Message:</strong> {{ req.message }}</p>
+            </div>
+            {% endif %}
+            
+            {% if req.status == 'pending' %}
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px;">
+                <form method="post" action="{% url 'update_request_status' req.id %}" style="flex: 1; min-width: 100px;">
+                    {% csrf_token %}
+                    <input type="hidden" name="status" value="approved">
+                    <button type="submit" class="btn" style="background: #28a745; color: white; width: 100%; padding: 10px;">
+                        ✓ Approve
+                    </button>
+                </form>
+                <form method="post" action="{% url 'update_request_status' req.id %}" style="flex: 1; min-width: 100px;">
+                    {% csrf_token %}
+                    <input type="hidden" name="status" value="rejected">
+                    <button type="submit" class="btn" style="background: #dc3545; color: white; width: 100%; padding: 10px;">
+                        ✗ Reject
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card" style="text-align: center; padding: 60px 20px;">
+        <h2 class="empty-message">📭 No availability requests</h2>
+        <p class="empty-description">No customers have requested room availability yet.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

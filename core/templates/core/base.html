@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BoardingNest{% endblock %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            align-items: center;
+            justify-content: center;
+
+
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FFE4E1 0%, #FFB6C1 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(255, 105, 180, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            transition: transform 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            position: relative;
+        }
+        
+        .notification-icon {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+        
+        .notification-icon:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.35);
+        }
+        
+        .nav-links a.old-nav, .nav-links button.old-nav {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            transition: all 0.3s;
+            background: transparent;
+            border: 2px solid white;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .nav-links a.old-nav:hover, .nav-links button.old-nav:hover {
+            background: white;
+            color: #FF1493;
+            transform: translateY(-2px);
+        }
+        
+        .menu-toggle {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 10px;
+            gap: 5px;
+        }
+        
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+        
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            min-width: 200px;
+            overflow: hidden;
+            z-index: 1000;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .dropdown-menu.show {
+            display: block;
+        }
+        
+        .dropdown-menu a, .dropdown-menu form button {
+            display: block;
+            padding: 15px 20px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .dropdown-menu a:hover, .dropdown-menu button:hover {
+            background: #FFE4E1;
+            color: #FF1493;
+        }
+        
+        .dropdown-menu a:last-child, .dropdown-menu button:last-child {
+            border-bottom: none;
+        }
+        
+        .greeting {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-right: 20px;
+            color: white;
+        }
+        
+        .messages {
+            margin: 20px auto;
+            max-width: 1200px;
+            padding: 0 20px;
+        }
+        
+        .alert {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .alert-success {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+            border: 2px solid #28a745;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #dc3545;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 105, 180, 0.4);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #FF1493;
+            border: 2px solid #FF1493;
+        }
+        
+        .btn-secondary:hover {
+            background: #FF1493;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #ff4757;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #ee5a6f;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 105, 180, 0.3);
+        }
+        
+        input[type="text"], input[type="email"], input[type="password"], 
+        input[type="number"], input[type="tel"], textarea, select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            border: 2px solid #FFB6C1;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #FF1493;
+            box-shadow: 0 0 10px rgba(255, 20, 147, 0.2);
+        }
+        
+        label {
+            font-weight: 600;
+            color: #333;
+            margin-top: 10px;
+            display: block;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-info {
+            background: #cfe2ff;
+            color: #084298;
+        }
+        
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            margin-top: 50px;
+        }
+        
+        /* Page-specific styles */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+        }
+        
+        .page-title {
+            color: #FF1493;
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.2rem;
+        }
+        
+        .large-title {
+            font-size: 4rem;
+            color: #FF1493;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(255, 20, 147, 0.3);
+        }
+        
+        .medium-title {
+            font-size: 2rem;
+            color: #FF1493;
+        }
+        
+        .room-card-title {
+            color: #FF1493;
+            margin-bottom: 15px;
+        }
+        
+        .room-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .address-box {
+            background: #fff9f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #FF1493;
+        }
+        
+        .contact-box {
+            background: #f0f9ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #FF1493;
+        }
+        
+        .address-text, .contact-text {
+            margin: 0;
+            color: #333;
+            font-size: 1.1rem;
+        }
+        
+        .description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .action-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-edit {
+            flex: 1;
+            min-width: 100px;
+            background: #FFB6C1;
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .btn-delete {
+            flex: 1;
+            min-width: 100px;
+            background: #ff4757;
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .btn-full-width {
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .error-box {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .error-list {
+            margin: 10px 0 0 20px;
+            padding: 0;
+        }
+        
+        .account-info {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #eee;
+        }
+        
+        .account-info h3 {
+            color: #FF1493;
+            margin-bottom: 15px;
+        }
+        
+        .account-info p {
+            color: #666;
+            margin: 10px 0;
+        }
+        
+        .centered-content {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-message {
+            color: #666;
+            font-size: 2rem;
+        }
+        
+        .empty-description {
+            color: #888;
+            margin-top: 15px;
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+        
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .select-input {
+            min-width: 150px;
+        }
+        
+        .social-btn-fb {
+            background: #1877f2;
+            color: white;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+        }
+        
+        .social-btn-ig {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: white;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+        }
+        
+        .other-contact {
+            background: #e8e8e8;
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: #333;
+            font-size: 0.95rem;
+        }
+        
+        .badge-xl {
+            font-size: 1rem;
+            padding: 8px 20px;
+        }
+        
+        .badge-price {
+            background: #fff3cd;
+            color: #856404;
+            margin-left: 10px;
+            font-size: 1rem;
+            padding: 8px 20px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .landlord-only {
+            display: none;
+        }
+        
+        .customer-only {
+            display: none;
+        }
+        
+        .logo-large {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .logo-text-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .nav-badge {
+            display: inline-block;
+            line-height: 1;
+            background: #dc3545;
+            color: white;
+            border-radius: 999px;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-left: 8px;
+        }
+        
+        .nav-badge--floating {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            margin: 0;
+            padding: 2px 6px;
+        }
+        
+        .nav-badge--info {
+            background: #0dcaf0;
+        }
+        
+        .nav-badge--success {
+            background: #28a745;
+        }
+        
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px;
+            }
+            
+            * {
+                max-width: 100%;
+            }
+            
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            .container {
+                padding: 10px;
+            }
+            
+            .navbar {
+                padding: 0.8rem 1rem;
+            }
+            
+            .navbar-content {
+                flex-wrap: wrap;
+            }
+            
+            .logo {
+                font-size: 1.3rem;
+            }
+            
+            .logo-img {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .greeting {
+                font-size: 1rem;
+                margin-right: 10px;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .card {
+                padding: 20px;
+                margin: 10px 0;
+            }
+            
+            .page-title, .large-title {
+                font-size: 2rem !important;
+            }
+            
+            .medium-title {
+                font-size: 1.5rem !important;
+            }
+            
+            h1 {
+                font-size: 2rem !important;
+            }
+            
+            h2 {
+                font-size: 1.5rem !important;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-form {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .search-input, .select-input {
+                width: 100%;
+                min-width: 100%;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn-edit, .btn-delete {
+                min-width: 100%;
+            }
+            
+            .dropdown-menu {
+                right: 10px;
+                min-width: 180px;
+            }
+            
+            input[type="text"], input[type="email"], input[type="password"],
+            input[type="number"], input[type="tel"], textarea, select {
+                font-size: 16px;
+            }
+            
+            .page-header {
+                padding: 20px 10px;
+            }
+            
+            .badge {
+                font-size: 0.8rem;
+                padding: 4px 10px;
+                margin-top: 5px;
+                display: inline-block;
+            }
+            
+            .logo-large {
+                width: 60px !important;
+                height: 60px !important;
+            }
+            
+            .logo-text-wrapper {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .notification-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.1rem;
+            }
+            
+            .logo-img {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .greeting {
+                font-size: 0.9rem;
+            }
+            
+            .page-title, .large-title {
+                font-size: 1.8rem !important;
+            }
+            
+            h1 {
+                font-size: 1.8rem !important;
+            }
+            
+            .card {
+                padding: 15px;
+            }
+            
+            .btn {
+                padding: 8px 15px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% if user.is_authenticated %}
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="nav-left">
+                <a href="{% url 'home' %}" class="logo">
+                    <img src="/media/boardnest.png" alt="Logo" class="logo-img">
+                    BoardingNest
+                </a>
+                
+              
+            </div>
+            <div class="nav-links">
+                <span class="greeting">Hello, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}</span>
+                
+                {% if not user.is_superuser %}
+                <a href="{% url 'public_search' %}" class="notification-icon" title="Search">
+                    🔍
+                </a>
+                {% endif %}
+                
+                <div class="menu-toggle" onclick="toggleMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                
+                <div class="dropdown-menu" id="dropdownMenu">
+                    {% if user.is_superuser %}
+                    <a href="{% url 'admin:index' %}">⚙️ Admin Panel</a>
+                    {% elif user.role == 'landlord' %}
+                   
+                    <a href="{% url 'landlord_notifications' %}">
+                        📬 Room Requests
+                        {% if pending_requests_count > 0 %}
+                            <span class="nav-badge">{{ pending_requests_count }}</span>
+                        {% endif %}
+                    </a>
+                    <a href="{% url 'landlord_history' %}">📜 History</a>
+                    <a href="{% url 'add_room' %}">➕ Add Room</a>
+                    {% else %}
+                    <a href="{% url 'customer_dashboard' %}">🏠 Browse Rooms</a>
+                    <a href="{% url 'customer_requests' %}">
+                        📋 My Requests
+                        {% if customer_pending_requests_count > 0 %}
+                            <span class="nav-badge nav-badge--success">{{ customer_pending_requests_count }}</span>
+                        {% elif notification_count > 0 %}
+                            <span class="nav-badge nav-badge--info">{{ notification_count }}</span>
+                        {% endif %}
+                    </a>
+                    <a href="{% url 'customer_history' %}">📜 History</a>
+                    {% endif %}
+                    <a href="{% url 'profile' %}">👤 Profile</a>
+                    <a href="#">📢 Ads & Corner</a>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit"> Logout</button>
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+    </nav>
+    {% endif %}
+    
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" data-auto-hide="8">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    <script>
+        // Auto-hide success messages after 8 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const successMessages = document.querySelectorAll('.alert-success[data-auto-hide]');
+            successMessages.forEach(function(message) {
+                const hideTime = parseFloat(message.getAttribute('data-auto-hide')) * 1000;
+                setTimeout(function() {
+                    message.style.opacity = '0';
+                    message.style.transform = 'translateY(-20px)';
+                    setTimeout(function() {
+                        message.remove();
+                    }, 300);
+                }, hideTime);
+            });
+        });
+    </script>
+    {% endif %}
+    
+    <!-- DEBUG: notification_count={{ notification_count }}, unread_notifications={{ unread_notifications|length }} -->
+    {% if user.is_authenticated and notification_count > 0 %}
+    <div class="notifications-box" style="background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%); padding: 20px; margin: 20px auto; max-width: 1200px; border-radius: 15px; box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3); border-left: 5px solid #ffc107;">
+        <h3 style="color: #856404; margin-bottom: 15px; font-size: 1.3rem;">🔔 New Notifications ({{ notification_count }})</h3>
+        {% for notification in unread_notifications %}
+        <div style="background: white; padding: 12px 15px; margin-bottom: 10px; border-radius: 10px; border-left: 3px solid #FF1493; animation: slideIn 0.3s ease-out;">
+            <p style="margin: 0; color: #333; font-weight: 500;">{{ notification.message }}</p>
+            <small style="color: #888;">{{ notification.created_at|timesince }} ago</small>
+        </div>
+        {% endfor %}
+        {% if user.role == 'landlord' %}
+            <a href="{% url 'landlord_notifications' %}" style="display: inline-block; margin-top: 10px; color: #856404; text-decoration: none; font-weight: 600; padding: 8px 20px; background: white; border-radius: 8px;">View All Requests →</a>
+        {% elif user.role == 'customer' %}
+            <a href="{% url 'customer_requests' %}" style="display: inline-block; margin-top: 10px; color: #856404; text-decoration: none; font-weight: 600; padding: 8px 20px; background: white; border-radius: 8px;">View My Requests →</a>
+        {% endif %}
+    </div>
+    {% endif %}
+    
+    {% block content %}{% endblock %}
+    
+    <footer>
+        <p>&copy; 2025 BoardingNest - Your Perfect Boarding House Solution</p>
+    </footer>
+    
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('dropdownMenu');
+            menu.classList.toggle('show');
+        }
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('dropdownMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            if (menu && toggle && !menu.contains(event.target) && !toggle.contains(event.target)) {
+                menu.classList.remove('show');
+            }
+        });
+    </script>
+
+
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+

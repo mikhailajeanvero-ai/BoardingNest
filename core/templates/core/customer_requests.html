@@ -1,0 +1,102 @@
+{% extends 'core/base.html' %}
+
+{% block title %}My Requests - BoardingNest{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 40px 20px;">
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h1 style="color: #FF1493; font-size: 2.5rem; margin-bottom: 10px;">My Room Requests</h1>
+        <p style="color: #666;">Track the status of your room availability requests</p>
+    </div>
+
+    {% if requests %}
+        <div class="row">
+            {% for req in requests %}
+                <div class="col-md-6 mb-4">
+                    <div class="card" style="border-radius: 15px; box-shadow: 0 4px 15px rgba(255, 20, 147, 0.1);">
+                        <div class="card-body">
+                            <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 15px;">
+                                <h5 style="color: #FF1493; margin: 0;">{{ req.room.title }}</h5>
+                                <span class="badge {% if req.status == 'pending' %}badge-warning{% elif req.status == 'approved' %}badge-success{% else %}badge-danger{% endif %}" 
+                                      style="padding: 5px 10px; border-radius: 20px;">
+                                    {{ req.get_status_display }}
+                                </span>
+                            </div>
+                            
+                            <p><strong>Room Type:</strong> {{ req.room.get_room_type_display }}</p>
+                            <p><strong>Location:</strong> {{ req.room.location|default:"Not specified" }}</p>
+                            {% if req.room.price %}
+                                <p><strong>Price:</strong> ₱{{ req.room.price }}</p>
+                            {% endif %}
+                            <p><strong>Landlord:</strong> {{ req.room.landlord.get_full_name|default:req.room.landlord.username }}</p>
+                            <p><strong>Request Date:</strong> {{ req.created_at|date:"M d, Y H:i" }}</p>
+                            
+                            {% if req.status == 'approved' %}
+                                <div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 10px; border-radius: 8px; margin-top: 15px;">
+                                    <strong>Great news!</strong> Your request has been approved. You can contact the landlord using the information below.
+                                </div>
+                                
+                                <div style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                                    <h6 style="color: #FF1493; margin-bottom: 10px;">Contact Information:</h6>
+                                    {% if req.room.contact_number %}
+                                        <p><strong>Phone:</strong> {{ req.room.contact_number }}</p>
+                                    {% endif %}
+                                    {% if req.room.facebook_link %}
+                                        <p><strong>Facebook:</strong> <a href="{{ req.room.facebook_link }}" target="_blank">{{ req.room.facebook_link }}</a></p>
+                                    {% endif %}
+                                    {% if req.room.instagram_link %}
+                                        <p><strong>Instagram:</strong> <a href="{{ req.room.instagram_link }}" target="_blank">{{ req.room.instagram_link }}</a></p>
+                                    {% endif %}
+                                    {% if req.room.other_contact %}
+                                        <p><strong>Other:</strong> {{ req.room.other_contact }}</p>
+                                    {% endif %}
+                                </div>
+                            {% elif req.status == 'rejected' %}
+                                <div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 10px; border-radius: 8px; margin-top: 15px;">
+                                    Unfortunately, your request was declined. You can try contacting other landlords for similar rooms.
+                                </div>
+                            {% else %}
+                                <div style="background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 10px; border-radius: 8px; margin-top: 15px;">
+                                    Your request is pending. The landlord will review it soon.
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div style="text-align: center; padding: 60px 20px;">
+            <div style="color: #999; font-size: 1.2rem;">
+                <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 20px; display: block;"></i>
+                No requests made yet
+            </div>
+            <p style="color: #666;">Start browsing rooms and request availability to see your requests here.</p>
+            <a href="{% url 'customer_dashboard' %}" class="btn btn-primary" style="border-radius: 20px; padding: 10px 30px; margin-top: 20px;">
+                Browse Rooms
+            </a>
+        </div>
+    {% endif %}
+
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="{% url 'customer_dashboard' %}" class="btn btn-secondary" style="border-radius: 20px; padding: 10px 30px;">
+            Back to Dashboard
+        </a>
+    </div>
+</div>
+
+<style>
+.badge-warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+.badge-success {
+    background-color: #28a745;
+    color: white;
+}
+.badge-danger {
+    background-color: #dc3545;
+    color: white;
+}
+</style>
+{% endblock %}

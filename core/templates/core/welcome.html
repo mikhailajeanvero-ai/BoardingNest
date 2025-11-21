@@ -1,0 +1,69 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Welcome to BoardingNest{% endblock %}
+
+{% block content %}
+<div class="container" style="text-align: center; padding: 70px 20px; position: relative;">
+    <a href="{% url 'login' %}" style="position: absolute; top: 20px; right: 20px; padding: 12px 25px; background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%); color: white; border-radius: 25px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1rem; font-weight: 600; box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3); transition: transform 0.3s; gap: 8px;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+        🔍 Search
+    </a>
+    <div style="margin-bottom: 30px;">
+        <h1 style="font-size: 4rem; color: #FF1493; margin-bottom: 10px; text-shadow: 3px 3px 6px rgba(255, 20, 147, 0.3);" class="logo-text-wrapper">
+            <img src="/media/boardnest.png" alt="Logo" class="logo-large">
+            BoardingNest
+        </h1>
+        <p style="font-size: 1.5rem; color: #666; margin-bottom: 30px;">
+            Find Your Perfect Boarding House - Connect with Landlords
+        </p>
+        <p style="font-size: 1.2rem; color: #888; max-width: 6000px; margin: 0 auto;">
+            Whether you're looking for a single or double room, or if you're a landlord wanting to post available rooms, 
+            BoardingNest makes finding and listing boarding houses easy and convenient.
+        </p>
+    </div>
+    <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; margin-top: 60px;">
+        <div class="card" style="max-width: 300px; text-align: left;">
+            <h2 style="color: #FF1493; margin-bottom: 20px; font-size: 2rem;"> For Customers</h2>
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 10px 0; color: #666;">
+                    ✓ Browse available rooms
+                </li>
+                <li style="padding: 10px 0; color: #666;">
+                    ✓ Filter by room type
+                </li>
+                <li style="padding: 10px 0; color: #666;">
+                    ✓ Contact landlords directly
+                </li>
+                <li style="padding: 10px 0; color: #666;">
+                    ✓ View detailed descriptions
+                </li>
+            </ul>
+        </div>
+        <div class="card" style="max-width: 300px; text-align: left;">
+            <h2 style="color: #FF1493; margin-bottom: 20px; font-size: 2rem;"> For Landlords</h2>
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 10px 0; color: #666;">
+                    ✓ Post available rooms
+                </li>
+                <li style="padding: 10px 0; color: #666;">
+                    ✓ Edit your listings
+                </li>
+                <li style="padding: 10px 0; color: #666;">
+                    ✓ Add contact information
+                </li>
+                <li style="padding: 10px 0; color: #666;">
+                    ✓ Manage your portfolio
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div style="margin-top: 20px;">
+        <a href="{% url 'login' %}" class="btn btn-primary" style="margin: 10px; padding: 15px 40px; font-size: 1.2rem; height: 60px; display: inline-flex; align-items: center; justify-content: center;">
+ Login
+        </a>
+        <a href="{% url 'register' %}" class="btn btn-secondary" style="margin: 10px; padding: 15px 40px; font-size: 1.2rem; height: 60px; display: inline-flex; align-items: center; justify-content: center;">
+             Sign Up
+        </a>
+    </div>
+</div>
+{% endblock %}
+

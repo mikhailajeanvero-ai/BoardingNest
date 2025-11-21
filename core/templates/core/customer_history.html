@@ -1,0 +1,43 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Request History - BoardingNest{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div style="text-align: center; margin-bottom: 40px; padding: 40px 20px;">
+        <h1 style="color: #FF1493; font-size: 3rem; margin-bottom: 20px;">📜 Request History</h1>
+        <p style="color: #666; font-size: 1.2rem;">View all your past room requests</p>
+    </div>
+    
+    {% if history %}
+    <div class="grid">
+        {% for item in history %}
+        <div class="card">
+            <h3 style="color: #FF1493; margin-bottom: 15px;">{{ item.availability_request.room.title }}</h3>
+            
+            <div style="margin-bottom: 15px;">
+                <span class="badge {% if 'Accepted' in item.action %}badge-success{% else %}badge-danger{% endif %}">
+                    {{ item.action }}
+                </span>
+            </div>
+            
+            <p style="color: #666; margin-bottom: 10px;">
+                <strong>Landlord:</strong> {{ item.availability_request.room.landlord.get_full_name|default:item.availability_request.room.landlord.username }}
+            </p>
+            
+            <p style="color: #666; margin-bottom: 10px;">{{ item.message }}</p>
+            
+            <p style="color: #888; font-size: 0.9rem; margin-top: 15px;">
+                {{ item.created_at|date:"M d, Y - g:i A" }}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card" style="text-align: center; padding: 60px 20px;">
+        <h2 style="color: #666; font-size: 2rem;">No history yet</h2>
+        <p style="color: #888; margin-top: 15px;">Your request history will appear here</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

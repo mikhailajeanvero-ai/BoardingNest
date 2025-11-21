@@ -1,0 +1,32 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Poster - Ads & Corner{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 900px; padding: 40px 20px;">
+    <div class="card">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #FF1493; font-size: 2.5rem;">📋 Poster</h1>
+            <p style="color: #666;">BoardingNest Promotional Poster</p>
+        </div>
+        
+        <div style="text-align: center; padding: 40px;">
+            <img src="/media/poster.png" alt="BoardingNest Poster" 
+                 style="max-width: 100%; width: 100%; border-radius: 15px; box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);">
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 25px; border-radius: 15px; margin: 30px 0; border-left: 4px solid #FF1493;">
+            <h3 style="color: #FF1493; margin-bottom: 15px;">About Our Poster</h3>
+            <p style="color: #555; line-height: 1.8; text-align: justify;">
+                This logo is highly successful because it is emotionally resonant. It promises a secure and comfortable stay, utilizing a soft color palette to ensure the brand feels inviting and trustworthy. It is a logo that promises not just a room, but a caring environment.
+            </p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="{% url 'profile' %}" class="btn btn-secondary" style="padding: 12px 30px; border-radius: 25px;">
+                ← Back to Profile
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

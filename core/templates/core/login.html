@@ -1,0 +1,52 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Login - BoardingNest{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 500px; padding: 60px 20px;">
+    <div class="card">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #FF1493; font-size: 2.5rem; margin-bottom: 10px;"> Login</h1>
+            <p style="color: #666;">Welcome back to BoardingNest!</p>
+        </div>
+        
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required placeholder="Enter your username">
+            
+            <label for="password">Password</label>
+            <div style="position: relative;">
+                <input type="password" id="password" name="password" required placeholder="Enter your password" style="padding-right: 70px;">
+                <button type="button" onclick="togglePassword('password', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 0.85rem; padding: 5px 8px; color: #FF1493; font-weight: 600;">Show</button>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px; padding: 15px; height: 55px;">
+                Login
+            </button>
+        </form>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <p style="color: #666;">Don't have an account? <a href="{% url 'register' %}" style="color: #FF1493; text-decoration: none; font-weight: 600;">Sign up here</a></p>
+            <a href="{% url 'welcome' %}" style="color: #666; text-decoration: none; display: inline-block; margin-top: 10px;">← Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function togglePassword(fieldId, button) {
+    const field = document.getElementById(fieldId);
+    if (field.type === 'password') {
+        field.type = 'text';
+        button.innerHTML = 'Hide';
+    } else {
+        field.type = 'password';
+        button.innerHTML = 'Show';
+    }
+}
+</script>
+{% endblock %}
+

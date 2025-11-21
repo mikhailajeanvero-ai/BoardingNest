@@ -1,0 +1,97 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Admin Dashboard - BoardingNest{% endblock %}
+
+{% block extra_css %}
+<style>
+@media (max-width: 768px) {
+    .admin-search-form {
+        flex-direction: column !important;
+    }
+    .admin-search-form .btn {
+        width: 100%;
+    }
+    .admin-table-container {
+        max-height: 400px !important;
+    }
+    .admin-table th, .admin-table td {
+        padding: 10px !important;
+        font-size: 0.85rem !important;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 1200px;">
+    <div style="text-align: center; margin-bottom: 20px; padding: 20px;">
+        <h1 style="color: #FF1493; font-size: 2.5rem; margin-bottom: 10px;">⚙️ Admin Dashboard</h1>
+        <p style="color: #666; font-size: 1.1rem;">Manage all registered users</p>
+    </div>
+    
+    <div class="card" style="padding: 20px;">
+        <h2 style="color: #FF1493; margin-bottom: 20px;">📋 Registered Users</h2>
+        
+        <form method="get" style="margin-bottom: 20px;">
+            <div class="admin-search-form" style="display: flex; gap: 10px;">
+                <input type="text" name="search" placeholder="Search by name or username..." 
+                       value="{{ search_query }}" style="flex: 1; padding: 10px 15px;">
+                <button type="submit" class="btn btn-primary" style="padding: 10px 20px;">🔍 Search</button>
+                <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary" style="padding: 10px 20px;">Clear</a>
+            </div>
+        </form>
+        
+        {% if users %}
+        <div class="admin-table-container" style="max-height: 500px; overflow-y: auto; overflow-x: auto; border: 1px solid #f0f0f0; border-radius: 10px;">
+            <table class="admin-table" style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                <thead>
+                    <tr style="background: linear-gradient(135deg, #FFE4E1 0%, #FFB6C1 100%); border-bottom: 2px solid #FF1493;">
+                        <th style="padding: 15px; text-align: left; color: #FF1493; font-weight: 700;">Name</th>
+                        <th style="padding: 15px; text-align: left; color: #FF1493; font-weight: 700;">Username</th>
+                        <th style="padding: 15px; text-align: left; color: #FF1493; font-weight: 700;">Email</th>
+                        <th style="padding: 15px; text-align: left; color: #FF1493; font-weight: 700;">Role</th>
+                        <th style="padding: 15px; text-align: left; color: #FF1493; font-weight: 700;">Registered</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr style="border-bottom: 1px solid #f0f0f0; {% if forloop.counter|divisibleby:2 %}background: #fafafa;{% endif %}">
+                        <td style="padding: 15px; color: #333;">
+                            <strong>{{ user.get_full_name|default:"-" }}</strong>
+                        </td>
+                        <td style="padding: 15px; color: #666;">
+                            {{ user.username }}
+                        </td>
+                        <td style="padding: 15px; color: #666;">
+                            {{ user.email }}
+                        </td>
+                        <td style="padding: 15px;">
+                            <span class="badge {% if user.role == 'landlord' %}badge-info{% else %}badge-success{% endif %}" style="font-size: 0.85rem; padding: 5px 12px;">
+                                {{ user.get_role_display }}
+                            </span>
+                        </td>
+                        <td style="padding: 15px; color: #666; font-size: 0.9rem;">
+                            {{ user.date_joined|date:"M d, Y" }}<br>
+                            <small style="color: #999;">{{ user.date_joined|date:"h:i A" }}</small>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 10px;">
+            <p style="margin: 0; color: #666;">
+                <strong>Total Users:</strong> {{ users.count }} 
+                ({{ users|dictsort:"role"|slice:":1"|length }} Customers, 
+                {{ users.count }} total)
+            </p>
+        </div>
+        {% else %}
+        <div style="text-align: center; padding: 40px;">
+            <h3 style="color: #666;">No users registered yet</h3>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
