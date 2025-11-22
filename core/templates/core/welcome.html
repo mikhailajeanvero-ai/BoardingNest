@@ -9,11 +9,11 @@
         🔍 Search
     </a>
     <div style="margin-bottom: 30px;">
-        <img src="{% static 'core/images/boardnest.png' %}" alt="BoardingNest Logo" style="width: 150px; height: auto; margin-bottom: 20px;">
-        <h1 style="font-size: 4rem; color: #FF1493; margin-bottom: 10px; text-shadow: 3px 3px 6px rgba(255, 20, 147, 0.3);">
+        <h1 style="font-size: 4rem; color: #FF1493; margin-bottom: 10px; text-shadow: 3px 3px 6px rgba(255, 20, 147, 0.3); display: inline-flex; align-items: center; gap: 15px;">
+            <img src="/media/room_images/boardnest.png" alt="Logo" style="width: 70px; height: auto;">
             BoardingNest
         </h1>
-        <p style="font-size: 1.5rem; color: #666; margin-bottom: 30px;">
+        <p style="font-size: 1.5rem; color: #666; margin-bottom: 30px; margin-top: 20px;">
             Find Your Perfect Boarding House - Connect with Landlords
         </p>
         <p style="font-size: 1.2rem; color: #888; max-width: 6000px; margin: 0 auto;">
@@ -23,7 +23,7 @@
     </div>
     <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; margin-top: 60px;">
         <div class="card" style="max-width: 300px; text-align: left;">
-            <h2 style="color: #FF1493; margin-bottom: 20px; font-size: 2rem;"> For Customers</h2>
+            <h2 style="color: #FF1493; margin-bottom: 20px; font-size: 2rem;">For Customers</h2>
             <ul style="list-style: none; padding: 0;">
                 <li style="padding: 10px 0; color: #666;">
                     ✓ Browse available rooms
@@ -40,7 +40,7 @@
             </ul>
         </div>
         <div class="card" style="max-width: 300px; text-align: left;">
-            <h2 style="color: #FF1493; margin-bottom: 20px; font-size: 2rem;"> For Landlords</h2>
+            <h2 style="color: #FF1493; margin-bottom: 20px; font-size: 2rem;">For Landlords</h2>
             <ul style="list-style: none; padding: 0;">
                 <li style="padding: 10px 0; color: #666;">
                     ✓ Post available rooms
@@ -59,10 +59,10 @@
     </div>
     <div style="margin-top: 20px;">
         <a href="{% url 'login' %}" class="btn btn-primary" style="margin: 10px; padding: 15px 40px; font-size: 1.2rem; height: 60px; display: inline-flex; align-items: center; justify-content: center;">
- Login
+            Login
         </a>
         <a href="{% url 'register' %}" class="btn btn-secondary" style="margin: 10px; padding: 15px 40px; font-size: 1.2rem; height: 60px; display: inline-flex; align-items: center; justify-content: center;">
-             Sign Up
+            Sign Up
         </a>
     </div>
 </div>
